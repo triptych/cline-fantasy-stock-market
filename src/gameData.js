@@ -18,6 +18,15 @@ export const stocks = {
         description: 'Premium weapons and armor',
         emoji: '⚔️'
     },
+    GOW: {
+        name: 'Goblin Ordnance Works',
+        symbol: 'GOW',
+        sector: 'combat',
+        basePrice: 65,
+        volatility: 0.17,
+        description: 'Explosive devices and siege weapons',
+        emoji: '💣'
+    },
     WBC: {
         name: 'Wizard\'s Brew Co.',
         symbol: 'WBC',
@@ -35,6 +44,15 @@ export const stocks = {
         volatility: 0.18,
         description: 'Magical document production',
         emoji: '📜'
+    },
+    MSI: {
+        name: 'Mystic Staffs Inc.',
+        symbol: 'MSI',
+        sector: 'magic',
+        basePrice: 140,
+        volatility: 0.16,
+        description: 'Premium magical implements',
+        emoji: '🪄'
     },
     CHC: {
         name: 'Castle Holdings Corp.',
@@ -54,6 +72,15 @@ export const stocks = {
         description: 'Sustainable magical housing',
         emoji: '🌳'
     },
+    UTD: {
+        name: 'Underground Tower Developments',
+        symbol: 'UTD',
+        sector: 'realestate',
+        basePrice: 175,
+        volatility: 0.08,
+        description: 'Subterranean luxury dwellings',
+        emoji: '🗼'
+    },
     GAW: {
         name: 'Griffin Airways',
         symbol: 'GAW',
@@ -72,6 +99,15 @@ export const stocks = {
         description: 'Magical transportation infrastructure',
         emoji: '✨'
     },
+    DRC: {
+        name: 'Dragon Rider Carriers',
+        symbol: 'DRC',
+        sector: 'transport',
+        basePrice: 95,
+        volatility: 0.19,
+        description: 'Premium dragon transport services',
+        emoji: '🐲'
+    },
     MMC: {
         name: 'Mithril Mining Corp.',
         symbol: 'MMC',
@@ -89,6 +125,33 @@ export const stocks = {
         volatility: 0.13,
         description: 'Rare magical components',
         emoji: '🔥'
+    },
+    GEM: {
+        name: 'Gemstone Enchantment Mining',
+        symbol: 'GEM',
+        sector: 'resources',
+        basePrice: 130,
+        volatility: 0.15,
+        description: 'Magical gemstone extraction',
+        emoji: '💎'
+    },
+    UFS: {
+        name: 'Unicorn Food Supplies',
+        symbol: 'UFS',
+        sector: 'agriculture',
+        basePrice: 55,
+        volatility: 0.07,
+        description: 'Magical creature feed production',
+        emoji: '🦄'
+    },
+    MHF: {
+        name: 'Magical Herb Farms',
+        symbol: 'MHF',
+        sector: 'agriculture',
+        basePrice: 70,
+        volatility: 0.10,
+        description: 'Cultivation of magical plants',
+        emoji: '🌿'
     }
 };
 
@@ -102,5 +165,16 @@ export const marketEvents = [
     { text: "Storm season disrupts griffin flights!", affects: ['GAW'], impact: -0.12 },
     { text: "Teleportation breakthrough announced!", affects: ['TNI'], impact: 0.20 },
     { text: "New mithril vein discovered!", affects: ['MMC'], impact: -0.15 },
-    { text: "Phoenix migration season begins!", affects: ['PFE'], impact: 0.14 }
+    { text: "Phoenix migration season begins!", affects: ['PFE'], impact: 0.14 },
+    { text: "Goblin inventors unveil new siege weapon!", affects: ['GOW'], impact: 0.18 },
+    { text: "Magical staff shortage due to wood elf strike!", affects: ['MSI'], impact: -0.13 },
+    { text: "Underground crystal caves discovered!", affects: ['UTD', 'GEM'], impact: 0.16 },
+    { text: "Dragon breeding season affects transport routes!", affects: ['DRC', 'GAW'], impact: -0.11 },
+    { text: "Rare magical herb blight reported!", affects: ['MHF', 'WBC'], impact: -0.14 },
+    { text: "Unicorn sanctuary expansion approved!", affects: ['UFS'], impact: 0.12 },
+    { text: "Ancient magical gemstone deposit found!", affects: ['GEM'], impact: 0.17 },
+    { text: "War preparations increase weapon demand!", affects: ['DSW', 'GOW'], impact: 0.13 },
+    { text: "Magical transportation safety regulations updated!", affects: ['TNI', 'DRC'], impact: -0.09 },
+    { text: "Enchanted forest growth accelerates!", affects: ['ETE', 'MHF'], impact: 0.11 },
+    { text: "Dragon treaty negotiations affect multiple sectors!", affects: ['DSI', 'DRC', 'UFS'], impact: -0.10 }
 ];

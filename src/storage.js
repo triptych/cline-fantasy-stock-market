@@ -1,11 +1,21 @@
 import { gameState, initializePrices, initialGameState } from './gameState.js';
 import { MARKET_UPDATED } from './marketLogic.js';
+import { stocks } from './gameData.js';
 
 // Load saved state from localStorage
 export function loadSavedState() {
     const savedState = localStorage.getItem('fantasyStockMarketState');
     if (savedState) {
         Object.assign(gameState, JSON.parse(savedState));
+
+        // Initialize prices for any new stocks that weren't in the saved state
+        for (const symbol in stocks) {
+            if (!gameState.currentPrices[symbol]) {
+                gameState.currentPrices[symbol] = stocks[symbol].basePrice;
+                gameState.priceHistory[symbol] = [stocks[symbol].basePrice];
+            }
+        }
+
         gameState.lastUpdateTime = Date.now(); // Reset last update time on load
         document.dispatchEvent(new CustomEvent(MARKET_UPDATED));
     } else {
@@ -39,6 +49,15 @@ export function loadGame(file) {
         try {
             const loadedState = JSON.parse(e.target.result);
             Object.assign(gameState, loadedState);
+
+            // Initialize prices for any new stocks that weren't in the loaded save file
+            for (const symbol in stocks) {
+                if (!gameState.currentPrices[symbol]) {
+                    gameState.currentPrices[symbol] = stocks[symbol].basePrice;
+                    gameState.priceHistory[symbol] = [stocks[symbol].basePrice];
+                }
+            }
+
             gameState.lastUpdateTime = Date.now(); // Reset last update time
             document.dispatchEvent(new CustomEvent(MARKET_UPDATED));
             saveStateToStorage();

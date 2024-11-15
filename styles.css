@@ -39,6 +39,7 @@ header {
     align-items: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     border-bottom: 2px solid var(--accent-color);
+    margin-top: 40px;
 }
 
 .market-header {
@@ -330,6 +331,42 @@ select, input {
 
 .stock-filters {
     margin-bottom: 1rem;
+}
+
+.ticker-tape {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+    padding: 8px 0;
+    border-bottom: 2px solid var(--accent-color);
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.ticker-content {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 30s linear infinite;
+}
+
+.ticker-content span {
+    display: inline-block;
+    padding: 0 2rem;
+    color: var(--text-color);
+    font-family: var(--body-font);
+    font-weight: 600;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 /* Custom scrollbar */

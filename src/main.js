@@ -2,12 +2,14 @@ import { loadSavedState, saveGame, loadGame, resetGame } from './storage.js';
 import { initializeChart, togglePause, updateChart } from './marketLogic.js';
 import { gameState } from './gameState.js';
 import { updateTimeButtons, updateUI, updateStockList } from './ui.js';
+import { initializeTickerTape } from './tickerTape.js';
 
 // Initialize game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeChart();
     loadSavedState();
     updateUI();
+    initializeTickerTape();
 
     // Initialize pause state
     const pauseButton = document.getElementById('pauseGame');
