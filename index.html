@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Stock Market</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Fantasy Stock Market</h1>
+        <div class="game-controls">
+            <div class="dropdown">
+                <button class="dropdown-btn">Game Menu</button>
+                <div class="dropdown-content">
+                    <button id="saveGame">Save Game</button>
+                    <button id="loadGame">Load Game</button>
+                    <button id="resetGame">Reset Game</button>
+                </div>
+            </div>
+            <div class="player-stats">
+                <p>Gold: <span id="gold">1000</span></p>
+                <p>Rank: <span id="rank">Apprentice Trader</span></p>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="market-overview">
+            <h2>Market Overview</h2>
+            <div class="time-controls">
+                <button id="dayView" class="time-button active">Day</button>
+                <button id="weekView" class="time-button">Week</button>
+                <button id="monthView" class="time-button">Month</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="marketChart"></canvas>
+            </div>
+        </section>
+
+        <section class="portfolio">
+            <h2>Your Portfolio</h2>
+            <div id="holdings" class="holdings-list"></div>
+        </section>
+
+        <section class="trading">
+            <h2>Trading</h2>
+            <div class="stock-list">
+                <div class="stock-filters">
+                    <select id="sectorFilter">
+                        <option value="all">All Sectors</option>
+                        <option value="combat">Combat & Defense</option>
+                        <option value="magic">Magic & Potions</option>
+                        <option value="realestate">Real Estate</option>
+                        <option value="transport">Transportation</option>
+                        <option value="resources">Resources & Mining</option>
+                    </select>
+                </div>
+                <div id="availableStocks" class="stocks-grid"></div>
+            </div>
+        </section>
+
+        <section class="news-feed">
+            <h2>Market News</h2>
+            <div id="news" class="news-list"></div>
+        </section>
+    </main>
+
+    <div class="trade-modal" id="tradeModal">
+        <div class="modal-content">
+            <h3>Trade Stock</h3>
+            <div class="stock-info">
+                <p>Company: <span id="modalCompany"></span></p>
+                <p>Current Price: <span id="modalPrice"></span></p>
+                <p>Available Gold: <span id="modalGold"></span></p>
+            </div>
+            <div class="trade-controls">
+                <input type="number" id="tradeAmount" min="1" value="1">
+                <button id="buyButton">Buy</button>
+                <button id="sellButton">Sell</button>
+            </div>
+            <button class="close-modal" id="closeModal">×</button>
+        </div>
+    </div>
+
+    <input type="file" id="loadGameInput" style="display: none" accept=".json">
+    <script src="game.js"></script>
+</body>
+</html>
