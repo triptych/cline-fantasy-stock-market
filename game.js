@@ -475,6 +475,62 @@ function openTradeModal(symbol) {
     modal.style.display = 'flex';
 }
 
+// Save game to file
+function saveGame() {
+    const gameStateJson = JSON.stringify(gameState, null, 2);
+    const blob = new Blob([gameStateJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fantasy_stock_market_save.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Load game from file
+function loadGame(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const loadedState = JSON.parse(e.target.result);
+            gameState = loadedState;
+            gameState.lastUpdateTime = Date.now(); // Reset last update time
+            updateUI();
+            updateChart();
+            saveStateToStorage();
+        } catch (error) {
+            alert('Error loading save file: Invalid format');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Reset game to initial state
+function resetGame() {
+    if (confirm('Are you sure you want to reset the game? This will erase all progress.')) {
+        gameState = JSON.parse(JSON.stringify(initialGameState));
+        initializePrices();
+        updateUI();
+        updateChart();
+        saveStateToStorage();
+
+        // Reset UI elements
+        const pauseButton = document.getElementById('pauseGame');
+        const speedIndicator = document.getElementById('gameSpeed');
+        pauseButton.textContent = '▶️ Resume';
+        pauseButton.classList.add('paused');
+        speedIndicator.textContent = 'Paused';
+
+        // Clear any existing intervals
+        if (marketUpdateInterval) {
+            clearInterval(marketUpdateInterval);
+            marketUpdateInterval = null;
+        }
+    }
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeChart();
