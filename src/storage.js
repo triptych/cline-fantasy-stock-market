@@ -64,11 +64,5 @@ export function resetGame() {
         pauseButton.textContent = '▶️ Resume';
         pauseButton.classList.add('paused');
         speedIndicator.textContent = 'Paused';
-
-        // Clear any existing intervals
-        if (marketUpdateInterval) {
-            clearInterval(marketUpdateInterval);
-            marketUpdateInterval = null;
-        }
     }
 }

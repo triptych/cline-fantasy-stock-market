@@ -1,8 +1,9 @@
 import { stocks, marketEvents } from './gameData.js';
-import { gameState, marketUpdateInterval, initializePrices, getTimePeriodsData } from './gameState.js';
+import { gameState, initializePrices, getTimePeriodsData } from './gameState.js';
 import { saveStateToStorage } from './storage.js';
 
 let marketChart;
+let marketUpdateInterval = null;
 
 // Custom events
 export const MARKET_UPDATED = 'marketUpdated';
@@ -153,8 +154,10 @@ export function togglePause() {
         pauseButton.textContent = '▶️ Resume';
         pauseButton.classList.add('paused');
         speedIndicator.textContent = 'Paused';
-        clearInterval(marketUpdateInterval);
-        marketUpdateInterval = null;
+        if (marketUpdateInterval) {
+            clearInterval(marketUpdateInterval);
+            marketUpdateInterval = null;
+        }
     } else {
         pauseButton.textContent = '⏸️ Pause';
         pauseButton.classList.remove('paused');

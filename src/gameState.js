@@ -16,7 +16,6 @@ export const initialGameState = {
 
 // Current game state
 export let gameState = JSON.parse(JSON.stringify(initialGameState));
-export let marketUpdateInterval = null;
 
 // Initialize price history for each stock
 export function initializePrices() {
