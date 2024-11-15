@@ -41,6 +41,23 @@ header {
     border-bottom: 2px solid var(--accent-color);
 }
 
+.market-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.countdown {
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    border: 1px solid var(--accent-color);
+    font-family: var(--body-font);
+}
+
 .game-controls {
     display: flex;
     align-items: center;

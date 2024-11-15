@@ -12,6 +12,33 @@ document.addEventListener(NEWS_ADDED, (event) => {
     addNewsItem(event.detail);
 });
 
+// Update countdown timer
+function updateCountdown() {
+    const countdownElement = document.getElementById('marketCountdown');
+
+    if (gameState.isPaused) {
+        countdownElement.textContent = 'Market Paused';
+        return;
+    }
+
+    const now = Date.now();
+    const timeSinceLastUpdate = now - gameState.lastUpdateTime;
+    const timeUntilNextUpdate = Math.max(0, gameState.updateInterval - timeSinceLastUpdate);
+    const secondsRemaining = Math.ceil(timeUntilNextUpdate / 1000);
+
+    countdownElement.textContent = `Next Update: ${secondsRemaining}s`;
+}
+
+// Initialize countdown timer after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Set initial countdown state
+    const countdownElement = document.getElementById('marketCountdown');
+    countdownElement.textContent = 'Market Paused';
+
+    // Start countdown timer
+    setInterval(updateCountdown, 100);
+});
+
 // Update all UI elements
 export function updateUI() {
     document.getElementById('gold').textContent = Math.round(gameState.gold);
@@ -25,6 +52,7 @@ export function updateUI() {
     updateStockList();
     updateRank();
     updateChart();
+    updateCountdown();
 }
 
 // Update portfolio display

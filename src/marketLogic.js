@@ -64,12 +64,14 @@ export function initializeChart() {
 
 // Update market prices and trigger events
 export function updateMarket() {
-    if (Math.random() < 0.3) {
+    // Increased chance of news (50% instead of 30%)
+    if (Math.random() < 0.5) {
         const event = marketEvents[Math.floor(Math.random() * marketEvents.length)];
         document.dispatchEvent(new CustomEvent(NEWS_ADDED, { detail: event.text }));
 
+        // Apply the impact directly without random direction
         event.affects.forEach(symbol => {
-            const impactMultiplier = 1 + (event.impact * (Math.random() > 0.5 ? 1 : -1));
+            const impactMultiplier = 1 + event.impact;
             gameState.currentPrices[symbol] *= impactMultiplier;
         });
     }
