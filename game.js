@@ -1,4 +1,4 @@
-// Stock definitions
+// Stock definitions remain unchanged
 const stocks = {
     DSI: {
         name: 'DragonScale Industries',
@@ -100,17 +100,22 @@ const initialGameState = {
     priceHistory: {},
     day: 1,
     rank: 'Apprentice Trader',
-    currentView: 'day'
+    currentView: 'day',
+    isPaused: true, // Start paused by default
+    updateInterval: 10000, // 10 seconds for gameplay
+    lastUpdateTime: Date.now() // Track last update time
 };
 
 // Game state
 let gameState = JSON.parse(JSON.stringify(initialGameState));
+let marketUpdateInterval = null;
 
 // Load saved state from localStorage
 function loadSavedState() {
     const savedState = localStorage.getItem('fantasyStockMarketState');
     if (savedState) {
         gameState = JSON.parse(savedState);
+        gameState.lastUpdateTime = Date.now(); // Reset last update time on load
         updateUI();
     } else {
         initializePrices();
@@ -143,10 +148,50 @@ const marketEvents = [
     { text: "Phoenix migration season begins!", affects: ['PFE'], impact: 0.14 }
 ];
 
+// Game speed control
+function togglePause() {
+    gameState.isPaused = !gameState.isPaused;
+    const pauseButton = document.getElementById('pauseGame');
+    const speedIndicator = document.getElementById('gameSpeed');
+
+    if (gameState.isPaused) {
+        pauseButton.textContent = '▶️ Resume';
+        pauseButton.classList.add('paused');
+        speedIndicator.textContent = 'Paused';
+        clearInterval(marketUpdateInterval);
+        marketUpdateInterval = null;
+    } else {
+        pauseButton.textContent = '⏸️ Pause';
+        pauseButton.classList.remove('paused');
+        speedIndicator.textContent = 'Normal Speed';
+        gameState.lastUpdateTime = Date.now(); // Reset last update time on resume
+        startMarketUpdates();
+    }
+}
+
+function startMarketUpdates() {
+    if (marketUpdateInterval) {
+        clearInterval(marketUpdateInterval);
+    }
+
+    // Ensure we don't process multiple updates at once when resuming
+    marketUpdateInterval = setInterval(() => {
+        if (!gameState.isPaused) {
+            const now = Date.now();
+            const timeSinceLastUpdate = now - gameState.lastUpdateTime;
+
+            // Only update if enough time has passed
+            if (timeSinceLastUpdate >= gameState.updateInterval) {
+                updateMarket();
+                gameState.lastUpdateTime = now;
+            }
+        }
+    }, gameState.updateInterval);
+}
+
 // Chart initialization
 let marketChart;
 function initializeChart() {
-    // Ensure we have price history before initializing chart
     if (!gameState.priceHistory || Object.keys(gameState.priceHistory).length === 0) {
         initializePrices();
     }
@@ -160,22 +205,44 @@ function initializeChart() {
                 label: `${stocks[symbol].emoji} ${symbol}`,
                 data: [gameState.currentPrices[symbol]],
                 borderColor: getRandomColor(),
-                fill: false
+                fill: false,
+                tension: 0.4
             }))
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: "'Spectral', serif"
+                        }
+                    }
+                }
+            },
             scales: {
                 y: {
-                    beginAtZero: false
+                    beginAtZero: false,
+                    grid: {
+                        color: 'rgba(255, 215, 0, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(255, 215, 0, 0.1)'
+                    }
                 }
             }
         }
     });
 }
 
-// Helper function to generate random colors for chart lines
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -185,7 +252,6 @@ function getRandomColor() {
     return color;
 }
 
-// Get data for different time periods
 function getTimePeriodsData() {
     const allData = {};
     const periods = {
@@ -212,9 +278,7 @@ function getTimePeriodsData() {
     };
 }
 
-// Update stock prices
 function updateMarket() {
-    // Random event chance
     if (Math.random() < 0.3) {
         const event = marketEvents[Math.floor(Math.random() * marketEvents.length)];
         addNewsItem(event.text);
@@ -225,7 +289,6 @@ function updateMarket() {
         });
     }
 
-    // Regular price updates
     for (const symbol in stocks) {
         const stock = stocks[symbol];
         const randomChange = 1 + (Math.random() * stock.volatility * 2 - stock.volatility);
@@ -240,7 +303,6 @@ function updateMarket() {
     saveStateToStorage();
 }
 
-// Trading functions
 function buyStock(symbol, quantity) {
     const price = gameState.currentPrices[symbol];
     const totalCost = price * quantity;
@@ -276,7 +338,6 @@ function sellStock(symbol, quantity) {
     return true;
 }
 
-// UI updates
 function updateUI() {
     document.getElementById('gold').textContent = Math.round(gameState.gold);
     const portfolioValue = calculateNetWorth() - gameState.gold;
@@ -343,7 +404,6 @@ function updateChart() {
 
     marketChart.data.labels = timeData.labels[gameState.currentView] || ['Today'];
     marketChart.data.datasets.forEach(dataset => {
-        // Get the symbol (last word in the label)
         const symbol = dataset.label.split(' ').pop();
         if (timeData.data[symbol] && timeData.data[symbol][gameState.currentView]) {
             dataset.data = timeData.data[symbol][gameState.currentView];
@@ -374,7 +434,6 @@ function calculateNetWorth() {
     return gameState.gold + portfolioValue;
 }
 
-// News feed
 function addNewsItem(text) {
     const newsDiv = document.getElementById('news');
     const newsItem = document.createElement('div');
@@ -388,7 +447,6 @@ function addNewsItem(text) {
     }
 }
 
-// Trade modal
 function openTradeModal(symbol) {
     const modal = document.getElementById('tradeModal');
     const stock = stocks[symbol];
@@ -417,69 +475,31 @@ function openTradeModal(symbol) {
     modal.style.display = 'flex';
 }
 
-// Game save/load/reset functions
-function saveGame() {
-    const saveData = JSON.stringify(gameState);
-    const blob = new Blob([saveData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `fantasy-stock-market-save-day-${gameState.day}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function loadGame(file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const loadedState = JSON.parse(e.target.result);
-            gameState = loadedState;
-            updateUI();
-            updateChart();
-            saveStateToStorage();
-            addNewsItem("Game loaded successfully!");
-        } catch (error) {
-            alert("Error loading save file!");
-            console.error(error);
-        }
-    };
-    reader.readAsText(file);
-}
-
-function resetGame() {
-    if (confirm("Are you sure you want to reset the game? All progress will be lost!")) {
-        gameState = JSON.parse(JSON.stringify(initialGameState));
-        initializePrices();
-        updateUI();
-        updateChart();
-        localStorage.removeItem('fantasyStockMarketState');
-        addNewsItem("Game has been reset!");
-    }
-}
-
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
-    initializeChart(); // Initialize chart first
-    loadSavedState(); // Then load saved state
+    initializeChart();
+    loadSavedState();
     updateUI();
+
+    // Initialize pause state
+    const pauseButton = document.getElementById('pauseGame');
+    const speedIndicator = document.getElementById('gameSpeed');
+    pauseButton.textContent = '▶️ Resume';
+    pauseButton.classList.add('paused');
+    speedIndicator.textContent = 'Paused';
 
     // Game menu buttons
     document.getElementById('saveGame').onclick = saveGame;
-
     document.getElementById('loadGame').onclick = () => {
         document.getElementById('loadGameInput').click();
     };
-
     document.getElementById('loadGameInput').onchange = (e) => {
         if (e.target.files.length > 0) {
             loadGame(e.target.files[0]);
         }
     };
-
     document.getElementById('resetGame').onclick = resetGame;
+    document.getElementById('pauseGame').onclick = togglePause;
 
     // Time period view buttons
     document.getElementById('dayView').onclick = () => {
@@ -505,19 +525,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     document.getElementById('sectorFilter').onchange = updateStockList;
-
-    // Start market updates
-    setInterval(updateMarket, 5000); // Update every 5 seconds
 });
 
-// Update time period button states
 function updateTimeButtons(activeId) {
     ['dayView', 'weekView', 'monthView'].forEach(id => {
         document.getElementById(id).classList.toggle('active', id === activeId);
     });
 }
 
-// Close modal when clicking outside
 window.onclick = (event) => {
     const modal = document.getElementById('tradeModal');
     if (event.target === modal) {
