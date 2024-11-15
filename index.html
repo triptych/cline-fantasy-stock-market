@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fantasy Stock Market</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -11,6 +14,10 @@
     <header>
         <h1>Fantasy Stock Market</h1>
         <div class="game-controls">
+            <div class="time-control">
+                <button id="pauseGame" class="control-btn">⏸️ Pause</button>
+                <span id="gameSpeed" class="speed-indicator">Normal Speed</span>
+            </div>
             <div class="dropdown">
                 <button class="dropdown-btn">Game Menu</button>
                 <div class="dropdown-content">
@@ -85,6 +92,13 @@
     </div>
 
     <input type="file" id="loadGameInput" style="display: none" accept=".json">
-    <script src="game.js"></script>
+    <script type="module" src="src/main.js"></script>
+    <script>
+        // Make openTradeModal globally available
+        window.openTradeModal = (symbol) => {
+            const event = new CustomEvent('openTrade', { detail: symbol });
+            document.dispatchEvent(event);
+        };
+    </script>
 </body>
 </html>
