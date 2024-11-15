@@ -59,3 +59,9 @@ A medieval-fantasy themed stock market simulation game where players can trade s
 - Diversify your portfolio across different sectors
 - Use the time period views to analyze market trends
 - Save your game regularly to preserve your progress
+
+## Attribution
+
+Created by Andrew Wooldridge ([@triptych](https://github.com/triptych))
+
+[GitHub Repository](https://github.com/triptych/cline-fantasy-stock-market)
