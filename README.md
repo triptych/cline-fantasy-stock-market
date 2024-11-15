@@ -17,6 +17,7 @@ A medieval-fantasy themed stock market simulation game where players can trade s
   - Price charts with day/week/month views
   - Market news feed
   - Sector filtering
+  - Real-time ticker tape with live market updates
 - **Game Controls**:
   - Pause/Resume gameplay
   - Save/Load game progress
@@ -41,6 +42,7 @@ A medieval-fantasy themed stock market simulation game where players can trade s
   - `storage.js` - Save/load game functionality
   - `ui.js` - User interface updates
   - `gameData.js` - Game data and configurations
+  - `tickerTape.js` - Real-time market ticker functionality
 
 ## Technologies Used
 
@@ -53,6 +55,7 @@ A medieval-fantasy themed stock market simulation game where players can trade s
 ## Game Tips
 
 - Monitor the market news for events that might affect stock prices
+- Keep an eye on the ticker tape for real-time price changes and breaking news
 - Diversify your portfolio across different sectors
 - Use the time period views to analyze market trends
 - Save your game regularly to preserve your progress
