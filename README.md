@@ -65,3 +65,7 @@ A medieval-fantasy themed stock market simulation game where players can trade s
 Created by Andrew Wooldridge ([@triptych](https://github.com/triptych))
 
 [GitHub Repository](https://github.com/triptych/cline-fantasy-stock-market)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
